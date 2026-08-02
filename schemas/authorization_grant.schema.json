@@ -1,0 +1,167 @@
+{
+  "$defs": {
+    "ActorRef": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_type": {
+          "title": "Actor Type",
+          "type": "string"
+        },
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "actor_role": {
+          "title": "Actor Role",
+          "type": "string"
+        },
+        "delegated_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegated By"
+        }
+      },
+      "required": [
+        "actor_type",
+        "actor_id",
+        "actor_role"
+      ],
+      "title": "ActorRef",
+      "type": "object"
+    },
+    "GrantStatus": {
+      "enum": [
+        "pending",
+        "issued",
+        "partially_revoked",
+        "revoked",
+        "expired"
+      ],
+      "title": "GrantStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "grant_id": {
+      "title": "Grant Id",
+      "type": "string"
+    },
+    "demand_id": {
+      "title": "Demand Id",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/GrantStatus"
+    },
+    "grantor": {
+      "$ref": "#/$defs/ActorRef"
+    },
+    "grantee": {
+      "$ref": "#/$defs/ActorRef"
+    },
+    "data_scope": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Data Scope",
+      "type": "array"
+    },
+    "action_scope": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Action Scope",
+      "type": "array"
+    },
+    "automation_policy": {
+      "title": "Automation Policy",
+      "type": "string"
+    },
+    "redaction_policy": {
+      "title": "Redaction Policy",
+      "type": "string"
+    },
+    "constraints": {
+      "title": "Constraints",
+      "type": "object"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+      "title": "Issued At",
+      "type": "string"
+    },
+    "expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Expires At"
+    },
+    "revocable": {
+      "default": true,
+      "title": "Revocable",
+      "type": "boolean"
+    },
+    "revoked_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revoked At"
+    },
+    "revocation_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revocation Reason"
+    },
+    "extension": {
+      "title": "Extension",
+      "type": "object"
+    }
+  },
+  "required": [
+    "grant_id",
+    "demand_id",
+    "status",
+    "grantor",
+    "grantee",
+    "data_scope",
+    "action_scope",
+    "automation_policy",
+    "redaction_policy",
+    "constraints",
+    "issued_at"
+  ],
+  "title": "AuthorizationGrant",
+  "type": "object"
+}

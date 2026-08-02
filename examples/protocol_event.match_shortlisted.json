@@ -1,0 +1,26 @@
+{
+  "event_id": "evt_0001",
+  "demand_id": "dm_0001",
+  "event_type": "match.shortlisted",
+  "phase": "ai2x.m",
+  "occurred_at": "2026-07-09T00:07:00Z",
+  "actor": {
+    "actor_type": "system",
+    "actor_id": "candidate_ranker",
+    "actor_role": "matcher",
+    "delegated_by": null
+  },
+  "previous_state": "routed",
+  "next_state": "matched",
+  "reason_code": "candidate_pool_ready",
+  "refs": {
+    "shortlist_id": "shortlist_0001"
+  },
+  "evidence_refs": [],
+  "extension": {
+    "shortlist": {
+      "candidate_count": 3,
+      "selection_mode": "capability_fit"
+    }
+  }
+}

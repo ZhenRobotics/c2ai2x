@@ -1,0 +1,37 @@
+{
+  "envelope_id": "env_0001",
+  "protocol": "c2ai2x-core",
+  "protocol_version": "v1",
+  "message_kind": "event",
+  "event_type": "routing.decided",
+  "occurred_at": "2026-07-09T00:06:00Z",
+  "producer": {
+    "service": "frontstage-router",
+    "surface": "web.chat",
+    "implementation": {
+      "deployment": "prod-us-1"
+    }
+  },
+  "actor": {
+    "actor_type": "system",
+    "actor_id": "router_01",
+    "actor_role": "orchestrator"
+  },
+  "subject": {
+    "resource_type": "demand",
+    "resource_id": "dm_0001",
+    "demand_id": "dm_0001",
+    "phase": "ai2x.r"
+  },
+  "trace": {
+    "trace_id": "trace_0001",
+    "request_id": "req_0001",
+    "parent_event_id": null,
+    "causation_id": null
+  },
+  "idempotency_key": "routing.decided:dm_0001:1",
+  "payload": {
+    "decision": "route_to_executor_pool",
+    "selected_channel": "human_handoff"
+  }
+}

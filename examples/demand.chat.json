@@ -1,0 +1,72 @@
+{
+  "identity": {
+    "demand_id": "dm_0001",
+    "protocol_version": "c2ai2x-core/v1",
+    "created_at": "2026-07-09T00:00:00Z",
+    "source_surface": "web.chat",
+    "source_type": "chat"
+  },
+  "intent": {
+    "category": "service_request",
+    "goal": "clarify_options",
+    "requested_outcome": "structured_next_step",
+    "priority": "normal",
+    "urgency": "medium",
+    "budget": {
+      "currency": "USD",
+      "max_amount": 5000
+    },
+    "timeline": {
+      "target_at": "2026-07-12T00:00:00Z"
+    },
+    "region": "US-CA"
+  },
+  "input_context": {
+    "raw_input": "I need help comparing providers for a time-sensitive request.",
+    "structured_summary": "The requester wants a short list of viable providers and the next action to take.",
+    "conversation_refs": [
+      "conv_0001"
+    ],
+    "attachment_refs": [],
+    "external_refs": []
+  },
+  "constraints": {
+    "must_have": [
+      "verified_provider"
+    ],
+    "nice_to_have": [
+      "text_first"
+    ],
+    "deal_breakers": [
+      "no_follow_up"
+    ],
+    "risk_flags": [],
+    "execution_preferences": [
+      "human_review_after_summary"
+    ]
+  },
+  "authorization": {
+    "grant_refs": [],
+    "sharing_scope": [
+      "read_summary"
+    ],
+    "automation_scope": [
+      "request_clarification"
+    ],
+    "redaction_policy": "default_redact_contact",
+    "revocable": true
+  },
+  "state": {
+    "demand_state": "submitted",
+    "routing_status": "pending",
+    "execution_status": "not_started",
+    "settlement_status": "not_applicable",
+    "latest_event_id": null
+  },
+  "extension": {
+    "implementation": {
+      "source_channel": "public_web",
+      "locale": "en-US"
+    }
+  }
+}

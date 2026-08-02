@@ -1,0 +1,14 @@
+{
+  "error_code": "scope_denied",
+  "error_message": "requested action exceeds grant scope",
+  "error_scope": "authorization",
+  "resource_ref": {
+    "demand_id": "dm_0001",
+    "grant_id": "grant_0001"
+  },
+  "retryable": false,
+  "details": {
+    "requested_action": "lock_terms",
+    "required_scope": "write_terms"
+  }
+}

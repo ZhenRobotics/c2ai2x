@@ -1,0 +1,37 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "error_code": {
+      "title": "Error Code",
+      "type": "string"
+    },
+    "error_message": {
+      "title": "Error Message",
+      "type": "string"
+    },
+    "error_scope": {
+      "title": "Error Scope",
+      "type": "string"
+    },
+    "resource_ref": {
+      "title": "Resource Ref",
+      "type": "object"
+    },
+    "retryable": {
+      "default": false,
+      "title": "Retryable",
+      "type": "boolean"
+    },
+    "details": {
+      "title": "Details",
+      "type": "object"
+    }
+  },
+  "required": [
+    "error_code",
+    "error_message",
+    "error_scope"
+  ],
+  "title": "ProtocolError",
+  "type": "object"
+}

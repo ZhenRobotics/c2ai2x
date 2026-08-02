@@ -1,0 +1,145 @@
+{
+  "$defs": {
+    "ActorRef": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_type": {
+          "title": "Actor Type",
+          "type": "string"
+        },
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "actor_role": {
+          "title": "Actor Role",
+          "type": "string"
+        },
+        "delegated_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegated By"
+        }
+      },
+      "required": [
+        "actor_type",
+        "actor_id",
+        "actor_role"
+      ],
+      "title": "ActorRef",
+      "type": "object"
+    },
+    "DemandState": {
+      "enum": [
+        "draft",
+        "submitted",
+        "authorized",
+        "routed",
+        "matched",
+        "engaged",
+        "completed",
+        "closed",
+        "rejected",
+        "expired",
+        "revoked",
+        "failed"
+      ],
+      "title": "DemandState",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "title": "Event Id",
+      "type": "string"
+    },
+    "demand_id": {
+      "title": "Demand Id",
+      "type": "string"
+    },
+    "event_type": {
+      "title": "Event Type",
+      "type": "string"
+    },
+    "phase": {
+      "title": "Phase",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "actor": {
+      "$ref": "#/$defs/ActorRef"
+    },
+    "previous_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DemandState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "next_state": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DemandState"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reason_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason Code"
+    },
+    "refs": {
+      "title": "Refs",
+      "type": "object"
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Refs",
+      "type": "array"
+    },
+    "extension": {
+      "title": "Extension",
+      "type": "object"
+    }
+  },
+  "required": [
+    "event_id",
+    "demand_id",
+    "event_type",
+    "phase",
+    "occurred_at",
+    "actor"
+  ],
+  "title": "ProtocolEvent",
+  "type": "object"
+}

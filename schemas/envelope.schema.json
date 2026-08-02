@@ -1,0 +1,200 @@
+{
+  "$defs": {
+    "ActorRef": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_type": {
+          "title": "Actor Type",
+          "type": "string"
+        },
+        "actor_id": {
+          "title": "Actor Id",
+          "type": "string"
+        },
+        "actor_role": {
+          "title": "Actor Role",
+          "type": "string"
+        },
+        "delegated_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delegated By"
+        }
+      },
+      "required": [
+        "actor_type",
+        "actor_id",
+        "actor_role"
+      ],
+      "title": "ActorRef",
+      "type": "object"
+    },
+    "Producer": {
+      "additionalProperties": false,
+      "properties": {
+        "service": {
+          "title": "Service",
+          "type": "string"
+        },
+        "surface": {
+          "title": "Surface",
+          "type": "string"
+        },
+        "implementation": {
+          "title": "Implementation",
+          "type": "object"
+        }
+      },
+      "required": [
+        "service",
+        "surface"
+      ],
+      "title": "Producer",
+      "type": "object"
+    },
+    "Subject": {
+      "additionalProperties": false,
+      "properties": {
+        "resource_type": {
+          "title": "Resource Type",
+          "type": "string"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "demand_id": {
+          "title": "Demand Id",
+          "type": "string"
+        },
+        "phase": {
+          "title": "Phase",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_type",
+        "resource_id",
+        "demand_id",
+        "phase"
+      ],
+      "title": "Subject",
+      "type": "object"
+    },
+    "Trace": {
+      "additionalProperties": false,
+      "properties": {
+        "trace_id": {
+          "title": "Trace Id",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent Event Id"
+        },
+        "causation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Causation Id"
+        }
+      },
+      "required": [
+        "trace_id",
+        "request_id"
+      ],
+      "title": "Trace",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "envelope_id": {
+      "title": "Envelope Id",
+      "type": "string"
+    },
+    "protocol": {
+      "title": "Protocol",
+      "type": "string"
+    },
+    "protocol_version": {
+      "title": "Protocol Version",
+      "type": "string"
+    },
+    "message_kind": {
+      "title": "Message Kind",
+      "type": "string"
+    },
+    "event_type": {
+      "title": "Event Type",
+      "type": "string"
+    },
+    "occurred_at": {
+      "format": "date-time",
+      "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+      "title": "Occurred At",
+      "type": "string"
+    },
+    "producer": {
+      "$ref": "#/$defs/Producer"
+    },
+    "actor": {
+      "$ref": "#/$defs/ActorRef"
+    },
+    "subject": {
+      "$ref": "#/$defs/Subject"
+    },
+    "trace": {
+      "$ref": "#/$defs/Trace"
+    },
+    "idempotency_key": {
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "payload": {
+      "title": "Payload",
+      "type": "object"
+    }
+  },
+  "required": [
+    "envelope_id",
+    "protocol",
+    "protocol_version",
+    "message_kind",
+    "event_type",
+    "occurred_at",
+    "producer",
+    "actor",
+    "subject",
+    "trace",
+    "idempotency_key",
+    "payload"
+  ],
+  "title": "Envelope",
+  "type": "object"
+}

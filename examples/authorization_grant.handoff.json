@@ -1,0 +1,41 @@
+{
+  "grant_id": "grant_0001",
+  "demand_id": "dm_0001",
+  "status": "issued",
+  "grantor": {
+    "actor_type": "requester",
+    "actor_id": "user_0001",
+    "actor_role": "requester",
+    "delegated_by": null
+  },
+  "grantee": {
+    "actor_type": "executor_pool",
+    "actor_id": "pool_0001",
+    "actor_role": "router",
+    "delegated_by": null
+  },
+  "data_scope": [
+    "read_summary",
+    "read_contact"
+  ],
+  "action_scope": [
+    "route_to_executor",
+    "request_clarification"
+  ],
+  "automation_policy": "human_confirmation_required",
+  "redaction_policy": "default_redact_contact",
+  "constraints": {
+    "max_contact_attempts": 3,
+    "handoff_channel": "chat"
+  },
+  "issued_at": "2026-07-09T00:05:00Z",
+  "expires_at": null,
+  "revocable": true,
+  "revoked_at": null,
+  "revocation_reason": null,
+  "extension": {
+    "implementation": {
+      "consent_surface": "handoff_modal"
+    }
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "$defs": {
+    "DemandAuthorization": {
+      "additionalProperties": false,
+      "properties": {
+        "grant_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Grant Refs",
+          "type": "array"
+        },
+        "sharing_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Sharing Scope",
+          "type": "array"
+        },
+        "automation_scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Automation Scope",
+          "type": "array"
+        },
+        "redaction_policy": {
+          "title": "Redaction Policy",
+          "type": "string"
+        },
+        "revocable": {
+          "title": "Revocable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "redaction_policy",
+        "revocable"
+      ],
+      "title": "DemandAuthorization",
+      "type": "object"
+    },
+    "DemandConstraints": {
+      "additionalProperties": false,
+      "properties": {
+        "must_have": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Must Have",
+          "type": "array"
+        },
+        "nice_to_have": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Nice To Have",
+          "type": "array"
+        },
+        "deal_breakers": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Deal Breakers",
+          "type": "array"
+        },
+        "risk_flags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Risk Flags",
+          "type": "array"
+        },
+        "execution_preferences": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Execution Preferences",
+          "type": "array"
+        }
+      },
+      "title": "DemandConstraints",
+      "type": "object"
+    },
+    "DemandIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "demand_id": {
+          "title": "Demand Id",
+          "type": "string"
+        },
+        "protocol_version": {
+          "title": "Protocol Version",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])T([01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|[+-]([01]\\d|2[0-3]):[0-5]\\d)$",
+          "title": "Created At",
+          "type": "string"
+        },
+        "source_surface": {
+          "title": "Source Surface",
+          "type": "string"
+        },
+        "source_type": {
+          "title": "Source Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "demand_id",
+        "protocol_version",
+        "created_at",
+        "source_surface",
+        "source_type"
+      ],
+      "title": "DemandIdentity",
+      "type": "object"
+    },
+    "DemandInputContext": {
+      "additionalProperties": false,
+      "properties": {
+        "raw_input": {
+          "title": "Raw Input",
+          "type": "string"
+        },
+        "structured_summary": {
+          "title": "Structured Summary",
+          "type": "string"
+        },
+        "conversation_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Conversation Refs",
+          "type": "array"
+        },
+        "attachment_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Attachment Refs",
+          "type": "array"
+        },
+        "external_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "External Refs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "raw_input",
+        "structured_summary"
+      ],
+      "title": "DemandInputContext",
+      "type": "object"
+    },
+    "DemandIntent": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "goal": {
+          "title": "Goal",
+          "type": "string"
+        },
+        "requested_outcome": {
+          "title": "Requested Outcome",
+          "type": "string"
+        },
+        "priority": {
+          "title": "Priority",
+          "type": "string"
+        },
+        "urgency": {
+          "title": "Urgency",
+          "type": "string"
+        },
+        "budget": {
+          "title": "Budget",
+          "type": "object"
+        },
+        "timeline": {
+          "title": "Timeline",
+          "type": "object"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        }
+      },
+      "required": [
+        "category",
+        "goal",
+        "requested_outcome",
+        "priority",
+        "urgency",
+        "budget",
+        "timeline"
+      ],
+      "title": "DemandIntent",
+      "type": "object"
+    },
+    "DemandState": {
+      "enum": [
+        "draft",
+        "submitted",
+        "authorized",
+        "routed",
+        "matched",
+        "engaged",
+        "completed",
+        "closed",
+        "rejected",
+        "expired",
+        "revoked",
+        "failed"
+      ],
+      "title": "DemandState",
+      "type": "string"
+    },
+    "DemandStateSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "demand_state": {
+          "$ref": "#/$defs/DemandState"
+        },
+        "routing_status": {
+          "$ref": "#/$defs/RoutingStatus"
+        },
+        "execution_status": {
+          "$ref": "#/$defs/ExecutionStatus"
+        },
+        "settlement_status": {
+          "$ref": "#/$defs/SettlementStatus"
+        },
+        "latest_event_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latest Event Id"
+        }
+      },
+      "required": [
+        "demand_state",
+        "routing_status",
+        "execution_status",
+        "settlement_status"
+      ],
+      "title": "DemandStateSnapshot",
+      "type": "object"
+    },
+    "ExecutionStatus": {
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed",
+        "failed"
+      ],
+      "title": "ExecutionStatus",
+      "type": "string"
+    },
+    "RoutingStatus": {
+      "enum": [
+        "pending",
+        "decided",
+        "failed"
+      ],
+      "title": "RoutingStatus",
+      "type": "string"
+    },
+    "SettlementStatus": {
+      "enum": [
+        "not_applicable",
+        "pending",
+        "recorded",
+        "failed"
+      ],
+      "title": "SettlementStatus",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "identity": {
+      "$ref": "#/$defs/DemandIdentity"
+    },
+    "intent": {
+      "$ref": "#/$defs/DemandIntent"
+    },
+    "input_context": {
+      "$ref": "#/$defs/DemandInputContext"
+    },
+    "constraints": {
+      "$ref": "#/$defs/DemandConstraints"
+    },
+    "authorization": {
+      "$ref": "#/$defs/DemandAuthorization"
+    },
+    "state": {
+      "$ref": "#/$defs/DemandStateSnapshot"
+    },
+    "extension": {
+      "title": "Extension",
+      "type": "object"
+    }
+  },
+  "required": [
+    "identity",
+    "intent",
+    "input_context",
+    "constraints",
+    "authorization",
+    "state"
+  ],
+  "title": "Demand",
+  "type": "object"
+}

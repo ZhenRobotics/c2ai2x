@@ -1,0 +1,32 @@
+{
+  "protocol": "c2ai2x-core",
+  "protocol_version": "v1",
+  "artifact_index": "../index.json",
+  "examples": [
+    {
+      "file": "../examples/demand.chat.json",
+      "model": "Demand",
+      "schema": "../schemas/demand.schema.json"
+    },
+    {
+      "file": "../examples/envelope.routing.json",
+      "model": "Envelope",
+      "schema": "../schemas/envelope.schema.json"
+    },
+    {
+      "file": "../examples/authorization_grant.handoff.json",
+      "model": "AuthorizationGrant",
+      "schema": "../schemas/authorization_grant.schema.json"
+    },
+    {
+      "file": "../examples/protocol_event.match_shortlisted.json",
+      "model": "ProtocolEvent",
+      "schema": "../schemas/protocol_event.schema.json"
+    },
+    {
+      "file": "../examples/protocol_error.scope_denied.json",
+      "model": "ProtocolError",
+      "schema": "../schemas/protocol_error.schema.json"
+    }
+  ]
+}

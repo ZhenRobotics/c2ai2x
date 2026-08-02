@@ -1,0 +1,24 @@
+{
+  "protocol": "c2ai2x-core",
+  "version": "v1",
+  "artifacts": {
+    "schemas": [
+      "schemas/demand.schema.json",
+      "schemas/envelope.schema.json",
+      "schemas/authorization_grant.schema.json",
+      "schemas/protocol_event.schema.json",
+      "schemas/protocol_error.schema.json"
+    ],
+    "examples": [
+      "examples/demand.chat.json",
+      "examples/envelope.routing.json",
+      "examples/authorization_grant.handoff.json",
+      "examples/protocol_event.match_shortlisted.json",
+      "examples/protocol_error.scope_denied.json"
+    ],
+    "manifest": "conformance/manifest.json"
+  },
+  "official_docs": "docs.zhenrobot.com/protocols/c2ai2x/",
+  "runtime_ingress_repo": "zhen-platform-core",
+  "runtime_execution_repo": "zhen-brain-core"
+}
