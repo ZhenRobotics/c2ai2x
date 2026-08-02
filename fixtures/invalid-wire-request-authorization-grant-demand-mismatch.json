@@ -1,0 +1,31 @@
+{
+  "standard": "c2ai2x-core",
+  "version": "v1",
+  "message_id": "msg-invalid-grant-demand-mismatch-001",
+  "trace_id": "trace-invalid-grant-demand-mismatch-001",
+  "idempotency_key": "idem-invalid-grant-demand-mismatch-001",
+  "kind": "request",
+  "payload": {
+    "demand": {
+      "identity": {"demand_id": "demand-001", "protocol_version": "v1", "created_at": "2026-08-02T00:00:00Z", "source_surface": "fixture", "source_type": "fixture"},
+      "intent": {"category": "consultation", "goal": "validate_wire_contract", "requested_outcome": "contract_result", "priority": "normal", "urgency": "medium", "budget": {}, "timeline": {}},
+      "input_context": {"raw_input": "Validate.", "structured_summary": "Fixture."},
+      "constraints": {},
+      "authorization": {"redaction_policy": "default", "revocable": true},
+      "state": {"demand_state": "submitted", "routing_status": "pending", "execution_status": "not_started", "settlement_status": "not_applicable"}
+    },
+    "authorization_grant": {
+      "grant_id": "grant-invalid-demand-mismatch-001",
+      "demand_id": "demand-other-001",
+      "status": "issued",
+      "grantor": {"actor_type": "requester", "actor_id": "actor-requester-001", "actor_role": "requester"},
+      "grantee": {"actor_type": "provider", "actor_id": "actor-provider-001", "actor_role": "provider"},
+      "data_scope": ["read_summary"],
+      "action_scope": ["respond"],
+      "automation_policy": "manual_review",
+      "redaction_policy": "default",
+      "constraints": {},
+      "issued_at": "2026-08-02T00:00:00Z"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "standard": "c2ai2x-core",
+  "version": "v1",
+  "message_id": "msg-invalid-sync-001",
+  "trace_id": "trace-001",
+  "in_reply_to_request_id": "msg-request-001",
+  "kind": "completed",
+  "payload": {"workflow_id": "workflow-001", "result": {"summary": "fixture"}}
+}

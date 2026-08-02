@@ -3,7 +3,11 @@
   "artifacts": [
     {
       "path": "conformance/manifest.json",
-      "sha256": "b1f1e9c829f29f09b601690431a9fc9510c7e782b78f8bc4b7b2baeb22273955"
+      "sha256": "e00a664e5314355be8c795e1425c591174ae855cac2c768e8f7e6704321283a6"
+    },
+    {
+      "path": "conformance/wire-manifest.json",
+      "sha256": "0a71597c4b0c9b9b6b10a17b6859ea5a40962caa379189ef45395bde520bf8a9"
     },
     {
       "path": "examples/authorization_grant.handoff.json",
@@ -11,7 +15,7 @@
     },
     {
       "path": "examples/demand.chat.json",
-      "sha256": "41717a58752082200468737373655077dce037b894277a9e90bd63ea72aedd64"
+      "sha256": "8b24676ac9d9e5d1edafe47c7ae3a4d03cef6f69c460eb53df3c4f219dc7845a"
     },
     {
       "path": "examples/envelope.routing.json",
@@ -26,8 +30,60 @@
       "sha256": "ede6f2f3db047bcddb8af645af06e825f5cb662cda2a24708f557be5319c6b41"
     },
     {
+      "path": "fixtures/invalid-wire-cancelled-no-reason.json",
+      "sha256": "b7f8263d8d62204b8efc3b76fe17d920104a89659673ba178dcc837c7f69ff22"
+    },
+    {
+      "path": "fixtures/invalid-wire-request-authorization-grant-demand-mismatch.json",
+      "sha256": "fbfdd254cdf032bf27bded1d4300c88af56d60cd8f820f5894f370dd97e66b01"
+    },
+    {
+      "path": "fixtures/invalid-wire-request-incomplete-authorization-grant.json",
+      "sha256": "49608ae22e5c968297670ebfd17cf9e1eb0612fecc61daa4bd922de60b845c57"
+    },
+    {
+      "path": "fixtures/invalid-wire-request-incomplete-demand.json",
+      "sha256": "f185db2c0dfed3daed59a83d6bcb7377d7398a094b8b25d1e0af27d835ef34f9"
+    },
+    {
+      "path": "fixtures/invalid-wire-sync-completed-workflow.json",
+      "sha256": "37046365c363ab6d71c727b31eed144b8226aa0567afddecd85e13ae1549d4fd"
+    },
+    {
+      "path": "fixtures/wire-accepted.json",
+      "sha256": "c720fcc2f36828bf2734ce5e81ee40f12dc3355817f057db2601cc08b586db84"
+    },
+    {
+      "path": "fixtures/wire-cancelled.json",
+      "sha256": "4d6fae4be2f4eb34f9490c17d54608170d1a41f9d3421aaba837e9f62965d2c3"
+    },
+    {
+      "path": "fixtures/wire-completed.json",
+      "sha256": "cc20db492fb047d4bffdb6e9c840440c08c7db114d52dc57016ce4580d5e012b"
+    },
+    {
+      "path": "fixtures/wire-failed.json",
+      "sha256": "4b7aeb0f39b48287e161268f936ab372d68a34ee3f25306334f8135c2a2fbeb6"
+    },
+    {
+      "path": "fixtures/wire-request.json",
+      "sha256": "442e7cb38eb8edc3b7baf58b5464cb8fcb3c4ce499512969e8b49535ca2d69ad"
+    },
+    {
+      "path": "fixtures/wire-sync-completed.json",
+      "sha256": "cf2b3471a2b8a22cda0e585c8ed54f4f48fccb46f55b6b33f8671b00f9e7a244"
+    },
+    {
+      "path": "fixtures/wire-terminal-trace-mismatch.json",
+      "sha256": "f69b17aaf83969b081166264224d02a2a6e199c6ae82f31a18b248cf67bc0fa6"
+    },
+    {
+      "path": "fixtures/wire-terminal-workflow-mismatch.json",
+      "sha256": "f9e911a93fa005a9ab7a42a0c381048bc291ec3a234e7abbbf4f55da492ba217"
+    },
+    {
       "path": "index.json",
-      "sha256": "8aebf35634bbd14d76ff96a8b0056fcd4ad9942c3b4ed842852497c6199c773c"
+      "sha256": "eb7bfe8b8dcdb5e0c0f22898661935128947a29f0dbeae69f871906ada588ffe"
     },
     {
       "path": "schemas/authorization_grant.schema.json",
@@ -35,11 +91,11 @@
     },
     {
       "path": "schemas/demand.schema.json",
-      "sha256": "7bb72195e51f91dd84c7360caf64f9d7c057bc53b5b628a5465d00820d5032d7"
+      "sha256": "024126c96b5caa3ce2625c1552bf941bf3a0fdaab8d0c223ec0ecf3a3145d78d"
     },
     {
       "path": "schemas/envelope.schema.json",
-      "sha256": "1885e2445cbe500a37e1e55ac7084fef4c3a1cac68c7da84c0fe0f1f067e47b2"
+      "sha256": "b923f3d45e0dbb5915c1b8cb952556093e9ec2edf858b721b2a435165767dd17"
     },
     {
       "path": "schemas/protocol_error.schema.json",
@@ -48,6 +104,26 @@
     {
       "path": "schemas/protocol_event.schema.json",
       "sha256": "49f671cde42cb89c714f76a540fe445a5e4c32b323d23d30314884639d1b01f7"
+    },
+    {
+      "path": "spec/c2ai2x-core-v1.md",
+      "sha256": "4e8cd039b5e053b5c22ff8e0d2223b72d0cfca82c4a3ff7b0f1490c326c8330b"
+    },
+    {
+      "path": "wire/accepted-response.schema.json",
+      "sha256": "451226c4c112e997da54569edcad44de300fc7953dc93224eb29028221406fb3"
+    },
+    {
+      "path": "wire/request-envelope.schema.json",
+      "sha256": "ffee8a4a7cd4f189724d5a796da9740c3ef53bafe7bf1b1aec6861a7071f0a06"
+    },
+    {
+      "path": "wire/synchronous-completed-response.schema.json",
+      "sha256": "6066e6b9a2ac222091f1585e6cdb7087b3c6d4c4f819b6f525b754e6470c75bd"
+    },
+    {
+      "path": "wire/terminal-event.schema.json",
+      "sha256": "b77af1027c600b2b30953e4fedb81c7c98d3791160bbad7d21492cc480e0be89"
     }
   ],
   "version": 1

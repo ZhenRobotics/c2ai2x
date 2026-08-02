@@ -2,6 +2,7 @@
   "protocol": "c2ai2x-core",
   "protocol_version": "v1",
   "artifact_index": "../index.json",
+  "wire_conformance_manifest": "wire-manifest.json",
   "examples": [
     {
       "file": "../examples/demand.chat.json",

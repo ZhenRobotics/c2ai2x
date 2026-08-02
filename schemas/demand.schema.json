@@ -90,6 +90,7 @@
           "type": "string"
         },
         "protocol_version": {
+          "const": "v1",
           "title": "Protocol Version",
           "type": "string"
         },

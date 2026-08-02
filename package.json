@@ -5,7 +5,7 @@
   "description": "Static C2AI2X Core Protocol assets and offline reference validator.",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "node --test reference/validator.test.mjs",
-    "validate": "node scripts/validate.mjs"
+    "test": "node --test reference/validator.test.mjs reference/wire-contract.test.mjs && node reference/adapter-mock-provider.test.mjs",
+    "validate": "node scripts/validate.mjs && node reference/wire-contract.test.mjs && node reference/adapter-mock-provider.test.mjs"
   }
 }

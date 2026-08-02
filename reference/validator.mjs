@@ -5,15 +5,19 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
-const schemaNames = new Set([
+const schemaFiles = new Map([
   'demand',
   'envelope',
   'authorization_grant',
   'protocol_event',
   'protocol_error',
-]);
+].map((name) => [name, `schemas/${name}.schema.json`]));
+schemaFiles.set('wire-request', 'wire/request-envelope.schema.json');
+schemaFiles.set('wire-accepted', 'wire/accepted-response.schema.json');
+schemaFiles.set('wire-sync-completed', 'wire/synchronous-completed-response.schema.json');
+schemaFiles.set('wire-terminal', 'wire/terminal-event.schema.json');
 const knownKeywords = new Set([
-  '$defs', '$ref', 'additionalProperties', 'anyOf', 'const', 'default', 'enum',
+  '$defs', '$ref', '$schema', 'additionalProperties', 'anyOf', 'const', 'default', 'enum',
   'format', 'items', 'minItems', 'minLength', 'oneOf', 'pattern', 'properties',
   'required', 'title', 'type',
 ]);
@@ -99,20 +103,59 @@ function assertSupportedSchema(schema, pointer = '#') {
   }
 }
 
-function resolveRef(rootSchema, ref) {
-  const match = /^#\/\$defs\/([^/]+)$/.exec(ref);
-  if (!match || !rootSchema.$defs || !(match[1] in rootSchema.$defs)) {
-    throw new SchemaError(`Unsupported or unresolved $ref ${JSON.stringify(ref)}.`);
-  }
-  return rootSchema.$defs[match[1]];
+function isPathBelowRoot(schemaPath) {
+  return schemaPath.startsWith(`${root}${path.sep}`);
 }
 
-function validateAgainst(rootSchema, schema, value, pointer) {
+function decodePointerSegment(segment) {
+  return segment.replace(/~1/g, '/').replace(/~0/g, '~');
+}
+
+function splitReference(document, ref) {
+  if (typeof ref !== 'string') throw new SchemaError(`$ref in ${document.path} must be a string.`);
+  const hashIndex = ref.indexOf('#');
+  const relativePath = hashIndex === -1 ? ref : ref.slice(0, hashIndex);
+  const fragment = hashIndex === -1 ? '' : ref.slice(hashIndex);
+  if (relativePath === '') return { path: document.path, fragment };
+  if (relativePath.includes(':')) throw new SchemaError(`Only local file $ref values are supported: ${JSON.stringify(ref)}.`);
+
+  const referencedPath = path.resolve(path.dirname(document.path), relativePath);
+  if (!isPathBelowRoot(referencedPath)) {
+    throw new SchemaError(`Local $ref escapes the published asset root: ${JSON.stringify(ref)}.`);
+  }
+  return { path: referencedPath, fragment };
+}
+
+function resolvePointer(schema, fragment, ref) {
+  if (fragment === '' || fragment === '#') return schema;
+  if (!fragment.startsWith('#/')) throw new SchemaError(`Unsupported $ref fragment ${JSON.stringify(ref)}.`);
+
+  let resolved = schema;
+  for (const rawSegment of fragment.slice(2).split('/')) {
+    const segment = decodePointerSegment(rawSegment);
+    if (!isObject(resolved) || !(segment in resolved)) {
+      throw new SchemaError(`Unresolved $ref ${JSON.stringify(ref)}.`);
+    }
+    resolved = resolved[segment];
+  }
+  if (!isObject(resolved)) throw new SchemaError(`$ref ${JSON.stringify(ref)} must resolve to a schema object.`);
+  return resolved;
+}
+
+function resolveRef(document, ref, documents) {
+  const target = splitReference(document, ref);
+  const targetDocument = documents.get(target.path);
+  if (!targetDocument) throw new SchemaError(`Unresolved local $ref ${JSON.stringify(ref)}.`);
+  return { document: targetDocument, schema: resolvePointer(targetDocument.schema, target.fragment, ref) };
+}
+
+function validateAgainst(document, schema, value, pointer, documents) {
   const errors = [];
   const add = (keyword, message) => errors.push(schemaError(pointer, keyword, message));
 
   if ('$ref' in schema) {
-    errors.push(...validateAgainst(rootSchema, resolveRef(rootSchema, schema.$ref), value, pointer));
+    const resolved = resolveRef(document, schema.$ref, documents);
+    errors.push(...validateAgainst(resolved.document, resolved.schema, value, pointer, documents));
   }
   if ('type' in schema && !typeMatches(value, schema.type)) {
     add('type', `expected ${schema.type}, received ${value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value}`);
@@ -135,7 +178,7 @@ function validateAgainst(rootSchema, schema, value, pointer) {
     add('minItems', `array length must be at least ${schema.minItems}`);
   }
   if ('items' in schema && Array.isArray(value)) {
-    value.forEach((item, index) => errors.push(...validateAgainst(rootSchema, schema.items, item, joinPointer(pointer, index))));
+    value.forEach((item, index) => errors.push(...validateAgainst(document, schema.items, item, joinPointer(pointer, index), documents)));
   }
   if (isObject(value)) {
     const properties = schema.properties ?? {};
@@ -143,7 +186,7 @@ function validateAgainst(rootSchema, schema, value, pointer) {
       if (!(name in value)) errors.push(schemaError(joinPointer(pointer, name), 'required', 'required property is missing'));
     }
     for (const [name, propertySchema] of Object.entries(properties)) {
-      if (name in value) errors.push(...validateAgainst(rootSchema, propertySchema, value[name], joinPointer(pointer, name)));
+      if (name in value) errors.push(...validateAgainst(document, propertySchema, value[name], joinPointer(pointer, name), documents));
     }
     if (schema.additionalProperties === false) {
       for (const name of Object.keys(value)) {
@@ -153,7 +196,7 @@ function validateAgainst(rootSchema, schema, value, pointer) {
   }
   for (const keyword of ['anyOf', 'oneOf']) {
     if (!(keyword in schema)) continue;
-    const passingBranches = schema[keyword].filter((branch) => validateAgainst(rootSchema, branch, value, pointer).length === 0);
+    const passingBranches = schema[keyword].filter((branch) => validateAgainst(document, branch, value, pointer, documents).length === 0);
     if ((keyword === 'anyOf' && passingBranches.length === 0) || (keyword === 'oneOf' && passingBranches.length !== 1)) {
       add(keyword, keyword === 'anyOf' ? 'value does not match any permitted schema' : 'value must match exactly one permitted schema');
     }
@@ -161,19 +204,53 @@ function validateAgainst(rootSchema, schema, value, pointer) {
   return errors;
 }
 
-async function loadSchema(schemaName) {
-  if (!schemaNames.has(schemaName)) {
-    throw new SchemaError(`Unknown schema ${JSON.stringify(schemaName)}. Allowed: ${[...schemaNames].join(', ')}.`);
-  }
-  const schemaPath = path.join(root, 'schemas', `${schemaName}.schema.json`);
-  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+function externalReferences(schema) {
+  const references = [];
+  const visit = (candidate) => {
+    if (!isObject(candidate)) return;
+    if ('$ref' in candidate && typeof candidate.$ref === 'string' && !candidate.$ref.startsWith('#')) {
+      references.push(candidate.$ref);
+    }
+    if ('$defs' in candidate) Object.values(candidate.$defs).forEach(visit);
+    if ('properties' in candidate) Object.values(candidate.properties).forEach(visit);
+    if ('items' in candidate) visit(candidate.items);
+    for (const keyword of ['anyOf', 'oneOf']) {
+      if (Array.isArray(candidate[keyword])) candidate[keyword].forEach(visit);
+    }
+  };
+  visit(schema);
+  return references;
+}
+
+async function loadSchemaDocument(schemaPath, documents) {
+  const normalizedPath = path.resolve(schemaPath);
+  if (!isPathBelowRoot(normalizedPath)) throw new SchemaError(`Schema path escapes the published asset root: ${schemaPath}.`);
+  if (documents.has(normalizedPath)) return documents.get(normalizedPath);
+
+  const schema = JSON.parse(await readFile(normalizedPath, 'utf8'));
   assertSupportedSchema(schema);
-  return schema;
+  const document = { path: normalizedPath, schema };
+  documents.set(normalizedPath, document);
+  for (const ref of externalReferences(schema)) {
+    const target = splitReference(document, ref);
+    await loadSchemaDocument(target.path, documents);
+  }
+  return document;
+}
+
+async function loadSchema(schemaName) {
+  if (!schemaFiles.has(schemaName)) {
+    throw new SchemaError(`Unknown schema ${JSON.stringify(schemaName)}. Allowed: ${[...schemaFiles.keys()].join(', ')}.`);
+  }
+  const schemaPath = path.join(root, schemaFiles.get(schemaName));
+  const documents = new Map();
+  const document = await loadSchemaDocument(schemaPath, documents);
+  return { document, documents };
 }
 
 export async function validateDocument(schemaName, document) {
-  const schema = await loadSchema(schemaName);
-  const errors = validateAgainst(schema, schema, document, '');
+  const loadedSchema = await loadSchema(schemaName);
+  const errors = validateAgainst(loadedSchema.document, loadedSchema.document.schema, document, '', loadedSchema.documents);
   return { valid: errors.length === 0, errors };
 }
 
@@ -190,7 +267,7 @@ async function main(argumentsList) {
   }
   const result = await validateDocument(schemaName, document);
   if (result.valid) {
-    process.stdout.write(`VALID: ${jsonFile} conforms to schemas/${schemaName}.schema.json\n`);
+    process.stdout.write(`VALID: ${jsonFile} conforms to ${schemaFiles.get(schemaName)}\n`);
     return;
   }
   process.stderr.write(`INVALID: ${jsonFile}\n`);

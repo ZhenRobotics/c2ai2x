@@ -1,0 +1,107 @@
+{
+  "protocol": "c2ai2x-core",
+  "protocol_version": "v1",
+  "artifact_index": "../index.json",
+  "fixtures": [
+    {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+    {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+    {"schema": "../wire/synchronous-completed-response.schema.json", "fixture": "../fixtures/wire-sync-completed.json"},
+    {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-completed.json"},
+    {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-failed.json"},
+    {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-cancelled.json"}
+  ],
+  "sequences": [
+    {
+      "name": "synchronous-completed",
+      "mode": "synchronous",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/synchronous-completed-response.schema.json", "fixture": "../fixtures/wire-sync-completed.json"}
+      ]
+    },
+    {
+      "name": "accepted-then-completed",
+      "mode": "asynchronous",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-completed.json"}
+      ]
+    },
+    {
+      "name": "accepted-then-failed",
+      "mode": "asynchronous",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-failed.json"}
+      ]
+    },
+    {
+      "name": "accepted-then-cancelled",
+      "mode": "asynchronous",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-cancelled.json"}
+      ]
+    }
+  ],
+  "negative_cases": [
+    {"name": "embedded-demand-is-not-an-untyped-object", "schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/invalid-wire-request-incomplete-demand.json", "expected_keyword": "required"},
+    {"name": "embedded-authorization-grant-is-not-an-untyped-object", "schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/invalid-wire-request-incomplete-authorization-grant.json", "expected_keyword": "required"},
+    {"name": "synchronous-completion-has-no-workflow-id", "schema": "../wire/synchronous-completed-response.schema.json", "fixture": "../fixtures/invalid-wire-sync-completed-workflow.json", "expected_keyword": "additionalProperties"},
+    {"name": "cancelled-terminal-requires-a-reason", "schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/invalid-wire-cancelled-no-reason.json", "expected_keyword": "oneOf"}
+  ],
+  "negative_sequences": [
+    {
+      "name": "synchronous-completion-has-no-follow-up-terminal",
+      "mode": "synchronous",
+      "expected_rule": "synchronous-completed-response",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/synchronous-completed-response.schema.json", "fixture": "../fixtures/wire-sync-completed.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-completed.json"}
+      ]
+    },
+    {
+      "name": "terminal-before-accepted",
+      "mode": "asynchronous",
+      "expected_rule": "accepted-before-terminal",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-completed.json"}
+      ]
+    },
+    {
+      "name": "terminal-workflow-must-match-accepted",
+      "mode": "asynchronous",
+      "expected_rule": "workflow-id",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-terminal-workflow-mismatch.json"}
+      ]
+    },
+    {
+      "name": "response-and-terminal-must-share-request-trace",
+      "mode": "asynchronous",
+      "expected_rule": "trace-id",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/wire-request.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-terminal-trace-mismatch.json"}
+      ]
+    },
+    {
+      "name": "authorization-grant-must-reference-embedded-demand",
+      "mode": "asynchronous",
+      "expected_rule": "authorization-grant-demand-id",
+      "messages": [
+        {"schema": "../wire/request-envelope.schema.json", "fixture": "../fixtures/invalid-wire-request-authorization-grant-demand-mismatch.json"},
+        {"schema": "../wire/accepted-response.schema.json", "fixture": "../fixtures/wire-accepted.json"},
+        {"schema": "../wire/terminal-event.schema.json", "fixture": "../fixtures/wire-completed.json"}
+      ]
+    }
+  ]
+}

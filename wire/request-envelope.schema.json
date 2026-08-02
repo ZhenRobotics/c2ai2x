@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C2AI2X Core v1 Request Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["standard", "version", "message_id", "trace_id", "idempotency_key", "kind", "payload"],
+  "properties": {
+    "standard": {"const": "c2ai2x-core"},
+    "version": {"const": "v1"},
+    "message_id": {"type": "string", "minLength": 1},
+    "trace_id": {"type": "string", "minLength": 1},
+    "idempotency_key": {"type": "string", "minLength": 1},
+    "kind": {"const": "request"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["demand"],
+      "properties": {
+        "demand": {"$ref": "../schemas/demand.schema.json"},
+        "authorization_grant": {"$ref": "../schemas/authorization_grant.schema.json"}
+      }
+    }
+  }
+}

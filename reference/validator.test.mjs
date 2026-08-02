@@ -52,6 +52,22 @@ for (const [schemaName, document, pointer] of invalidDocuments) {
   });
 }
 
+for (const [schemaName, example, pointer] of [
+  ['demand', 'examples/demand.chat.json', '/identity/protocol_version'],
+  ['envelope', 'examples/envelope.routing.json', '/protocol_version'],
+]) {
+  test(`${schemaName} rejects protocol_version v2`, async () => {
+    const document = JSON.parse(await readFile(new URL(`../${example}`, import.meta.url), 'utf8'));
+    if (schemaName === 'demand') document.identity.protocol_version = 'v2';
+    else document.protocol_version = 'v2';
+
+    const result = await validateDocument(schemaName, document);
+
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some((error) => error.pointer === pointer && error.keyword === 'const'));
+  });
+}
+
 test('validator source does not use environment, network, or HTTP modules', async () => {
   const source = await readFile(new URL('./validator.mjs', import.meta.url), 'utf8');
 

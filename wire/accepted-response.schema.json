@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "C2AI2X Core v1 Accepted Response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["standard", "version", "message_id", "trace_id", "in_reply_to_request_id", "kind", "payload"],
+  "properties": {
+    "standard": {"const": "c2ai2x-core"}, "version": {"const": "v1"},
+    "message_id": {"type": "string", "minLength": 1}, "trace_id": {"type": "string", "minLength": 1},
+    "in_reply_to_request_id": {"type": "string", "minLength": 1},
+    "kind": {"const": "accepted"},
+    "payload": {"type": "object", "additionalProperties": false, "required": ["workflow_id"], "properties": {"workflow_id": {"type": "string", "minLength": 1}}}
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "standard": "c2ai2x-core",
+  "version": "v1",
+  "message_id": "msg-invalid-demand-001",
+  "trace_id": "trace-invalid-demand-001",
+  "idempotency_key": "idem-invalid-demand-001",
+  "kind": "request",
+  "payload": {"demand": {"identity": {"demand_id": "demand-invalid-001"}}}
+}

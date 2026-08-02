@@ -11,13 +11,16 @@ node reference/validator.mjs <schema-name> <json-file>
 ```
 
 `schema-name` is one of `demand`, `envelope`, `authorization_grant`,
-`protocol_event`, or `protocol_error`. A valid document exits with status 0 and
-prints its schema. An invalid document exits with status 1 and reports each
-JSON Pointer, violated rule, and reason.
+`protocol_event`, `protocol_error`, `wire-request`, `wire-accepted`,
+`wire-sync-completed`, or `wire-terminal`. A valid document exits with status
+0 and prints its schema. An invalid document exits with status 1 and reports
+each JSON Pointer, violated rule, and reason.
 
-The validator reads only the selected local JSON document and the matching
-local schema. It does not read environment variables, access a network, or
-call HTTP or platform APIs.
+The validator reads only the selected local JSON document and its matching
+local schema graph. `$ref` may resolve only to another relative JSON schema
+inside this published asset root; network references, absolute paths, and
+paths that escape the root are rejected. It does not read environment
+variables, access a network, or call HTTP or platform APIs.
 
 ## Supported schema vocabulary
 
