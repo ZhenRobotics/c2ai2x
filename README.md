@@ -43,6 +43,18 @@ either individual Core schema alone.
 - `scripts/validate.mjs` — repository validation for integrity, validator tests, and sensitive-content scanning.
 - `CONTRIBUTING.md` and `GOVERNANCE.md` — contribution checks and the protocol-asset governance boundary.
 
+## Runtime boundary
+
+C2AI2X Core v1 is a public interchange contract derived from observed
+boundaries between Zhen's Widget-facing Platform and its admitted workflow
+runtime. It is intentionally independent of either runtime implementation.
+The reference-derived relationship, verification scope, and non-claims are
+documented in [`docs/reference-derived-runtime-boundary.md`](docs/reference-derived-runtime-boundary.md).
+
+The repository verifies offline schemas, lifecycle conformance, and its local
+reference adapter/mock provider. It does not claim to prove a production
+deployment, live external interoperability, or third-party adoption.
+
 ## Using the assets
 
 Select a schema from `schemas/` to validate a document, then compare it
