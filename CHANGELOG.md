@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.1.0
 
 - Repaired the Core v1 wire request so embedded `Demand` and optional `AuthorizationGrant` are validated against their published schemas.
 - Split synchronous completed responses from accepted-workflow terminal events; asynchronous `completed`, `failed`, and `cancelled` outcomes now require a workflow reference, and cancellation requires a reason.
