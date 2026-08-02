@@ -1,0 +1,11 @@
+{
+  "name": "c2ai2x-core-assets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static C2AI2X Core Protocol assets and offline reference validator.",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "node --test reference/validator.test.mjs",
+    "validate": "node scripts/validate.mjs"
+  }
+}

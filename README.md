@@ -23,6 +23,9 @@ machine-readable artifact index referenced by the conformance manifest.
 - `index.json` — machine-readable artifact index.
 - `integrity.json` — SHA-256 digests supplied with the public snapshot.
 - `spec/protocol-assets.md` — static-asset and integrity boundaries.
+- `reference/validator.mjs` — offline, zero-dependency reference validator for the published schemas.
+- `scripts/validate.mjs` — repository validation for integrity, validator tests, and sensitive-content scanning.
+- `CONTRIBUTING.md` and `GOVERNANCE.md` — contribution checks and the protocol-asset governance boundary.
 
 ## Using the assets
 
@@ -30,6 +33,28 @@ Select a schema from `schemas/` to validate a document, then compare it
 with the corresponding fixture in `examples/`. The manifest identifies the
 published example and schema pairs. Consumers are responsible for choosing
 their own JSON Schema validator and for any application-specific behavior.
+
+## Reference validator and repository checks
+
+The included reference validator is an offline, zero-dependency tool for the
+published schemas; it is not an SDK, runtime, gateway, or service. Run it with
+one of `demand`, `envelope`, `authorization_grant`, `protocol_event`, or
+`protocol_error` and a JSON document:
+
+```bash
+node reference/validator.mjs demand examples/demand.example.json
+```
+
+Before proposing changes, run the repository checks:
+
+```bash
+npm run validate
+```
+
+This verifies the published-asset integrity manifest, runs the reference
+validator tests, and scans the repository for private-key and credential-token
+patterns. Contribution and governance boundaries are described in
+[`CONTRIBUTING.md`](CONTRIBUTING.md) and [`GOVERNANCE.md`](GOVERNANCE.md).
 
 ## SHA-256 verification
 
